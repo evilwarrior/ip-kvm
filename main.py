@@ -118,6 +118,7 @@ orig_map = {"KEY_LEFT_CTRL":128,
             "KEY_KP_ENTER":224,
             "KEY_MENU":237
             }
+rev_map = dict(zip(map(lambda x: x[1], orig_map.items()), map(lambda x: x[0], orig_map.items())))
 
 if __name__ == "__main__":
     import pygame.camera as camera
@@ -236,6 +237,16 @@ if __name__ == "__main__":
        (cap_width+shift+(btn_width-font.size(txt['c_a_del'])[0])/2,
         5*height/btn_num+merge+txt_merge)}
 
+    ## Clear previous unreleased keys
+    pressed_keys = open('./.pressed_keys', 'ab+', 0)
+    pressed_keys.seek(0)
+    for b in pressed_keys.read():
+        print("Send release command of previous pressed key {} ({})".format(
+            rev_map[b] if b in rev_map else chr(b), int(b)))
+        uart.write(pack("!BB", 0, b))
+    pressed_keys.seek(0)
+    pressed_keys.truncate(0)
+
     while True:
         mouse = pygame.mouse.get_pos()
 
@@ -302,6 +313,15 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             ''' Close Window '''
             if event.type == pygame.QUIT:
+                ## Vacuum unreleased keys
+                pressed_keys.seek(0)
+                for b in pressed_keys.read():
+                    print("Send release command of pressed key {} ({})".format(
+                        rev_map[b] if b in rev_map else chr(b), int(b)))
+                    uart.write(pack("!BB", 0, b))
+                pressed_keys.seek(0)
+                pressed_keys.truncate(0)
+                pressed_keys.close()
                 capture.stop()
                 camera.quit()
                 pygame.quit()
@@ -355,7 +375,7 @@ if __name__ == "__main__":
                     capture.start()
                     print('Change to "({}) {}" Video capture device'.format(cap_sel, cap_list[cap_sel]))
 
-                ### Send short power command to promicro
+                ## Send short power command to promicro
                 elif (  btn_pos['pwr'][0] <= mouse[0] <= btn_pos['pwr'][0]+btn_width and
                         btn_pos['pwr'][1] <= mouse[1] <= btn_pos['pwr'][1]+btn_height):
                     print("trigger short power button")
@@ -404,3 +424,16 @@ if __name__ == "__main__":
                     continue
 
                 uart.write(pack("!BB", 1 if press else 0, key))
+
+                ## Recording pressed key and removing released key
+                if press:
+                    pressed_keys.seek(0, 2)
+                    pressed_keys.write(pack("!B", key))
+                else:
+                    pressed_keys.seek(0)
+                    pos = pressed_keys.read().find(pack("!B", key))
+                    pressed_keys.seek(pos+1)
+                    buf = copy(pressed_keys.read())
+                    pressed_keys.seek(pos)
+                    pressed_keys.truncate()
+                    pressed_keys.write(buf)
