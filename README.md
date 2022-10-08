@@ -1,21 +1,20 @@
 # 准备
 ## 硬件
 - 键盘模拟
-  - promicro，基于ATmega32U4芯片  
+  - promicro，基于ATmega32U4芯片
+  - USB转TTL模块(如CH340g)
 - 画面采集
   - USB采集卡
 - 机箱电源按钮模拟
-  - PC817光耦  
-  - USB转TTL模块(如CH340g)  
-  - 面包板一块  
-  - 1k ohm电阻若干  
-  - 杜邦线若干  
+  - PC817光耦
+  - 面包板一块
+  - 1k ohm电阻若干
+  - 杜邦线若干
 ## 软件
-- Python3，安装PyGame和pySerial库，用于运行main.py  
-- Arduino IDE，用于写入kvm.ino程序到promicro  
+- Python3，安装PyGame和pySerial库，用于运行main.py
+- Arduino IDE，用于写入kvm.ino程序到promicro
 - 如果系统使用Gnu/Linux，需要安装指令v4l2-ctl  
-比如Debian使用下面的指令安装  
-`sudo apt install v4l-utils`  
+比如Debian使用指令`sudo apt install v4l-utils`安装
 ## promicro连接示意图
 <img src="https://github.com/evilwarrior/ip-kvm/blob/main/Sketch.png" width="50%">
 
