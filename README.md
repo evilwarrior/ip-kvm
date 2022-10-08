@@ -20,6 +20,12 @@ Python3，安装PyGame和pySerial库，用于运行main.py
 
 Arduino IDE，用于写入kvm.ino程序到promicro
 
+如果系统使用Gnu/Linux，需要安装指令v4l2-ctl
+
+比如Debian使用下面的指令安装
+
+`sudo apt install v4l-utils`
+
 ![promicro连接示意图](https://github.com/evilwarrior/ip-kvm/blob/main/Sketch.png)
 
 # 说明
