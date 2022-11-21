@@ -20,7 +20,7 @@
 <img src="https://github.com/evilwarrior/ip-kvm/blob/main/Sketch.png" width="50%">
 
 # 说明
-iKVM的半解决方案，能够将x86/arm设备转化为KVM设备  
+iKVM的半解决方案，能够将x86/arm设备转化为KVM设备，支持Windows和大部分GNU/Linux发行版  
 只需要在设备上再安装桌面和远程桌面服务就能变成完整的iKVM  
 kvm.ino是写入到promicro的程序，可以做到键盘模拟及机箱电源按钮模拟，同时允许原来的机箱按键生效  
 main.py可以采集被控主机画面以及发送键盘指令和电源控制指令到promicro
